@@ -106,7 +106,5 @@ export default function MessageDecorator() {
                 placeholder="Decorated message will appear here."
             />
         </Flex>
-
-
     );
 }
