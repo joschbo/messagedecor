@@ -12,22 +12,29 @@ export default function MessageDecorator() {
     const [isDecorationRunning, setIsDecorationRunning] = useState(false);
     const [validationErrors, setValidationErrors] = useState(validateMessage(""));
 
+    const decoratedMessageQuillRef: React.RefAttributes<ReactQuill | undefined> = useRef(null);
+
     function onUserMessageChange(newValue: string) {
         setUserMessage(newValue);
         setValidationErrors(validateMessage(newValue));
     };
 
-    const decoratedMessageQuillRef = useRef();
 
-    function onCopy(event: any) {
+    function hasParentWithClass(element: Element, className: string) {
+        return element.closest('.' + className) !== null;
+    }
+
+    function onCopy(event: React.ClipboardEvent) {
+        if(!hasParentWithClass(event.target as Element, 'decorated-message-quill') || !decoratedMessageQuillRef.current) {
+            return;
+        }
         // Get the copied content
         let selectedText = decoratedMessageQuillRef.current.editor.root.innerHTML;
 
         // Check if selected text contains HTML tags and convert them
         let formattedText = selectedText.replace(/<strong>(.*?)<\/strong>/g, '**$1**')  // Convert <b> to **
             .replace(/<i>(.*?)<\/i>/g, '__$1__')
-            .replace(/<\/p>/g, '\n') // Convert <p> to \n
-            .replace(/<br>/g, '\n') // Convert <br> to \n
+            .replace(/<p><br><\/p>/g, '\n\n') // Convert <p><br><p> to \n\n
             .replace(/<[^>]*>/g, '');; // Convert <i> to __
 
         // Set the modified text into the clipboard

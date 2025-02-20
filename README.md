@@ -3,10 +3,10 @@ Small LLM based Application which enhances your WhatsApp, Telegram, Signal (or o
 
 The original text remains unchanged—only the formatting is adjusted to make your messages clearer and more engaging. Perfect for businesses, announcements, and marketing messages! 🚀
 
-## Technologies used
-- Typescript
-- React
-- AntDesign
-- LangChain
-- Vite
-- ExpressJS
+### Technologies used
+ ✅Typescript
+ ✅React
+ ✅AntDesign
+ ✅LangChain
+ ✅Vite
+ ✅ExpressJS
