@@ -8,5 +8,6 @@ The original text remains unchanged—only the formatting is adjusted to make yo
  ✅React
  ✅AntDesign
  ✅LangChain
+ ✅ChatGPT
  ✅Vite
  ✅ExpressJS

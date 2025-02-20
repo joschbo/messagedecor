@@ -12,7 +12,7 @@ export default function MessageDecorator() {
     const [isDecorationRunning, setIsDecorationRunning] = useState(false);
     const [validationErrors, setValidationErrors] = useState(validateMessage(""));
 
-    const decoratedMessageQuillRef = useRef(null);
+    const decoratedMessageQuillRef: any = useRef(null);
 
     function onUserMessageChange(newValue: string) {
         setUserMessage(newValue);
