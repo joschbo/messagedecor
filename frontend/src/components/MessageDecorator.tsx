@@ -38,14 +38,36 @@ export default function MessageDecorator() {
         }
     };
 
+    const toolbarOptions = ['bold', 'italic'];
+    const formats = ['bold', 'italic', 'link'];
+
 
     return (
         <Flex align="start" justify="space-between" gap="middle" style={{ height: "100%", width: "100%" }}>
             <Flex vertical style={{ height: "100%", width: "100%" }} gap="small">
-                <ReactQuill style={{ height: "90%" }} theme="bubble" value={userMessage} onChange={onUserMessageChange} placeholder="Paste or type your message here..."/>
+                <ReactQuill
+                    style={{
+                        height: "90%"
+                    }}
+                    theme="bubble"
+                    value={userMessage}
+                    onChange={onUserMessageChange}
+                    placeholder="Paste or type your message here..."
+                    formats={formats}
+                    modules={{
+                        toolbar: toolbarOptions
+                    }}
+                />
                 <Button type="primary" size="small" onClick={onPressDecorate} disabled={isDecorationRunning} loading={isDecorationRunning}>Decorate</Button>
             </Flex>
-            <ReactQuill style={{ height: "100%", width: "100%" }} readOnly={!decorated} theme="bubble" value={decoratedMessage} />
+            <ReactQuill
+                style={{ height: "100%", width: "100%" }}
+                readOnly={!decorated}
+                theme="bubble"
+                value={decoratedMessage}
+                formats={toolbarOptions}
+                placeholder="Decorated message will appear here."
+            />
         </Flex>
 
 
