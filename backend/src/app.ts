@@ -16,8 +16,12 @@ app.use(httpLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-app.post("/decoratemessage", async (req, res) => {
+app.get('/cors', (_req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.send({ "msg": "This has CORS enabled 🎈" })
+  })
+app.post("/api/decoratemessage", async (req, res) => {
+  console.log(req);
   const inputMessage = req.body.message;
   if (!inputMessage) {
       res.status(400).send("Missing message");

@@ -7,8 +7,21 @@ const chatModel = new ChatOpenAI({
   modelName: "gpt-4o-mini",
 });
 
+const reformatMessage = (message: string): string => {
+  return message.replace(/\n/g, "<br>").replace(/<br><br>/g, "<br>").replace(/```html/g, "").replace(/```/g, "")
+};
+
+const systemPrompt = `You are an assistant specialized in formatting WhatsApp broadcast messages for better readability and impact. Your task is to enhance messages using HTML formatting while strictly preserving the original text. Follow these guidelines:
+
+1. Structure the message by sections inserting bold headlines using \`<strong>\` where they improve readability.
+2. Use italics \`<em>\` sparingly for emphasis where it naturally fits the context.
+3. Highlight important words and phrases of the single sections in bold using \`<strong>\`, ensuring they enhance clarity without overuse.
+4. Enhance engagement by adding many emojis that reinforce meaning and tone.
+5. Do not modify the original wording — only adjust formatting for better clarity and impact and add headlines.
+6. Use a natural balance of bold, italics, line breaks, and emojis based on the message's content.`
+
 const promptTemplate = ChatPromptTemplate.fromMessages([
-  ["system", "You are an assistant specialized in enhancing WhatsApp messages for broadcast messages. Your task is to: 1. Insert bold headlines where it improves readability. 2. Highlight important words in bold where it makes sense in the context. 3. Insert paragraphs to make the message easier to read and follow. 4. Add relevant emojis where appropriate, to add emphasis or tone without changing the original content. 5. Do not alter the original text of the message; only adjust formatting for better clarity and impact."],
+  ["system", systemPrompt],
   ["user", "{message}"],
 ]);
 
@@ -30,5 +43,5 @@ export const decorateMessage = async (
     throw new Error("Invalid response from model");
   }
 
-  return response.content;
+  return reformatMessage(response.content);
 };
