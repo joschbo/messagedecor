@@ -1,7 +1,7 @@
 export const Description = () => (
     <div className="description">
         <p>
-            MessageDecor enhances your WhatsApp broadcast messages by improving readability and impact.
+            MessageDecor enhances your WhatsApp, Telegram, Signal (or other Messanger) broadcast messages by improving readability and impact.
             It automatically applies formatting such as <strong>bold headlines</strong>, <strong>highlighting important words</strong>,
             and adding <strong>line breaks</strong> for better structure. Relevant <strong>emojis</strong> 🎯🔥✅ are also included
             to enhance tone and engagement.

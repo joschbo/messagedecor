@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import http from 'http';
 import * as MessageDecorService from './services/messageDecorService';
+import { validateMessage } from "../../common/MessageValidator";
 
 dotenv.config({ path: path.join(__dirname, '../.env') });
 import { handleError } from './helpers/error';
@@ -20,6 +21,7 @@ app.get('/cors', (_req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   res.send({ "msg": "This has CORS enabled 🎈" })
   })
+
 app.post("/api/decoratemessage", async (req, res) => {
   console.log(req);
   const inputMessage = req.body.message;
@@ -28,6 +30,12 @@ app.post("/api/decoratemessage", async (req, res) => {
       return;
   }
   
+  const validationError = validateMessage(inputMessage);
+  if (validationError.length > 0) {
+      res.status(400).send(validationError.join("\n"));
+      return;
+  }
+
   try {
       const decoratedMessage = await MessageDecorService.decorateMessage(inputMessage);
       res.json({ message: decoratedMessage });
