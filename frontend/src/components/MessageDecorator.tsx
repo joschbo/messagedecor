@@ -12,7 +12,7 @@ export default function MessageDecorator() {
     const [isDecorationRunning, setIsDecorationRunning] = useState(false);
     const [validationErrors, setValidationErrors] = useState(validateMessage(""));
 
-    const decoratedMessageQuillRef: React.RefAttributes<ReactQuill | undefined> = useRef(null);
+    const decoratedMessageQuillRef = useRef(null);
 
     function onUserMessageChange(newValue: string) {
         setUserMessage(newValue);
@@ -79,8 +79,6 @@ export default function MessageDecorator() {
             <Flex vertical style={{ flexGrow: 1, width: "100%" }} gap="small" >
                 <ReactQuill
                     className="user-message-quill"
-                    style={{
-                    }}
                     theme="bubble"
                     value={userMessage}
                     onChange={onUserMessageChange}

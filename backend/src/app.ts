@@ -10,17 +10,23 @@ import { validateMessage } from "../../common/MessageValidator";
 dotenv.config({ path: path.join(__dirname, '../.env') });
 import { handleError } from './helpers/error';
 import httpLogger from './middlewares/httpLogger';
+import rateLimit from 'express-rate-limit';
 
 const app: express.Application = express();
+const DAY = 86400000;
 
+const limiter = rateLimit({
+	windowMs: DAY, 
+	limit: 20,
+	standardHeaders: 'draft-8',
+	legacyHeaders: false
+});
+
+app.use(limiter)
 app.use(httpLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.get('/cors', (_req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
-  res.send({ "msg": "This has CORS enabled 🎈" })
-  })
 
 app.post("/api/decoratemessage", async (req, res) => {
   console.log(req);
