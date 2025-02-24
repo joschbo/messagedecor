@@ -32,8 +32,8 @@ export default function MessageDecorator() {
         let selectedText = decoratedMessageQuillRef.current.editor.root.innerHTML;
 
         // Check if selected text contains HTML tags and convert them
-        let formattedText = selectedText.replace(/<strong>(.*?)<\/strong>/g, '**$1**')  // Convert <b> to **
-            .replace(/<i>(.*?)<\/i>/g, '__$1__')
+        let formattedText = selectedText.replace(/<strong>(.*?)<\/strong>/g, '*$1*')  // Convert <b> to **
+            .replace(/<i>(.*?)<\/i>/g, '_$1_')
             .replace(/<p><br><\/p>/g, '\n\n') // Convert <p><br><p> to \n\n
             .replace(/<[^>]*>/g, '');; // Convert <i> to __
 
