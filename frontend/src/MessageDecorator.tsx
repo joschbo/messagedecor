@@ -1,19 +1,22 @@
-import { Box, Button, Card, Center, Container, Group, LoadingOverlay, ScrollArea, Stack, Text, Title, Tooltip } from "@mantine/core";
+import { Box, Button, Card, Center, Container, em, Group, LoadingOverlay, Stack, Text, Title, useMantineTheme } from "@mantine/core";
 import { RichTextEditor } from "@mantine/tiptap";
-import { Editor, useEditor } from "@tiptap/react";
+import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import './MessageDecorator.css';
 import Placeholder from "@tiptap/extension-placeholder";
 import { useEffect, useState } from "react";
 import { validateMessage } from "../../common/MessageValidator";
 import { notifications } from "@mantine/notifications";
+import { useMediaQuery } from "@mantine/hooks";
 
 export default function MessageDecorator() {
     const [userMessage, setUserMessage] = useState("");
     const [decoratedMessage, setDecoratedMessage] = useState("");
-    const [decorated, setDecorated] = useState(false);
+    const [isDecorated, setDecorated] = useState(false);
     const [isDecorationRunning, setIsDecorationRunning] = useState(false);
     const [validationErrors, setValidationErrors] = useState(validateMessage(""));
+    const theme = useMantineTheme();
+    const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
 
     const userMessageEditor = useEditor({
         extensions: [
@@ -26,7 +29,8 @@ export default function MessageDecorator() {
             const errors = validateMessage(editor.getText());
             setValidationErrors(errors);
             setUserMessage(editor.getHTML());
-        }
+        },
+        content: userMessage
     });
     const decoratedMessageEditor = useEditor({
         extensions: [
@@ -39,7 +43,7 @@ export default function MessageDecorator() {
         if (!decoratedMessageEditor) return;
         // If the decorated message editor is not initialized, do nothing
 
-        if(!decorated) {
+        if (!isDecorated) {
             // If the message is not decorated, set the content to a placeholder
             decoratedMessageEditor.commands.setContent('<p>Decorated message will appear here...</p>');
             return;
@@ -47,7 +51,7 @@ export default function MessageDecorator() {
         // If the message is decorated, set the content to the decorated message
         if (decoratedMessageEditor.getHTML() !== decoratedMessage) {
             decoratedMessageEditor.commands.setContent(decoratedMessage);
-        } 
+        }
     }, [decoratedMessage, decoratedMessageEditor]);
 
 
@@ -118,25 +122,60 @@ export default function MessageDecorator() {
                                     Make your WhatsApp, Telegram, or Signal messages more readable and polished—instantly.
                                 </Text>
                             </Stack>
-                            <Group grow visibleFrom="md" gap={"md"} mt="xs">
-                                <RichTextEditor editor={userMessageEditor} h="300px">
-                                    <RichTextEditor.Content className="message-decorator-editor-content" />
-                                </RichTextEditor>
-                                <Box pos="relative">
-                                    <LoadingOverlay visible={isDecorationRunning} h="100%" w="100%" />
-                                    <RichTextEditor editor={decoratedMessageEditor} h="300px" onCopy={onCopyDecoratedMessage}>
-                                        <RichTextEditor.Content className="message-decorator-editor-content" />
-                                    </RichTextEditor>
-                                </Box>
 
+                            <Group grow gap="md" mt="xs">
+                                {/** Display only one RichTextEditor at a time on mobile devices. */}
+                                {(!isMobile || !isDecorated) && (
+                                    <Box pos="relative" w="100%">
+                                        <LoadingOverlay visible={isDecorationRunning} h="100%" w="100%" hiddenFrom="md" />
+                                        <RichTextEditor editor={userMessageEditor} h="300px" hidden={isMobile && isDecorated}>
+                                            <RichTextEditor.Content className="message-decorator-editor-content" />
+                                        </RichTextEditor>
+                                    </Box>)}
+                                {/** Display only one RichTextEditor at a time on mobile devices. */}
+                                {(!isMobile || isDecorated) && (
+                                    <Box pos="relative" w="100%">
+                                        <LoadingOverlay visible={isDecorationRunning} h="100%" w="100%" visibleFrom="md" />
+                                        <RichTextEditor
+                                            editor={decoratedMessageEditor}
+                                            h="300px"
+                                            onCopy={onCopyDecoratedMessage}
+                                        >
+                                            <RichTextEditor.Content className="message-decorator-editor-content" />
+                                        </RichTextEditor>
+                                    </Box>
+                                )}
                             </Group>
-                            <Tooltip label={validationErrors[0]} withArrow position="top" disabled={validationErrors.length === 0}>
-                                <Button onClick={onPressDecorate} disabled={validationErrors.length > 0} loading={isDecorationRunning} variant="filled" w="100%">Decorate</Button>
-                            </Tooltip>
+                            <Box>
+                                {/** Show Decorate button not on mobile when already decorated and result is shown */}
+                                {(!isMobile || !isDecorated) && (<Button
+                                    onClick={onPressDecorate}
+                                    disabled={validationErrors.length > 0}
+                                    loading={isDecorationRunning}
+                                    variant="filled"
+                                    w="100%"
+                                    autoFocus
+                                >
+                                    Decorate
+                                </Button>
+                                )}
+                                {/** Show Clear button on mobile when already decorated and result is shown */}
+                                {isMobile && isDecorated && (
+                                    <Button onClick={() => setDecorated(false)} variant="default" w="100%">
+                                        Back
+                                    </Button>
+                                )}
+                            </Box>
                         </Stack>
                     </Card>
                 </Container>
             </Center>
+            
+            <footer style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+                <Text ta="center" c="dimmed" fz="xs" p="md">
+                    Made with ❤️ by <a href="https://joschabohn.de" target="_blank" rel="noopener noreferrer">Joscha Bohn</a>
+                </Text>
+            </footer>
         </Box>
     );
 }
