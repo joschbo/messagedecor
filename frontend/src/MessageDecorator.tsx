@@ -139,9 +139,8 @@ export default function MessageDecorator() {
                                         <RichTextEditor
                                             editor={decoratedMessageEditor}
                                             h="300px"
-                                            onCopy={onCopyDecoratedMessage}
-                                        >
-                                            <RichTextEditor.Content className="message-decorator-editor-content" />
+                                            onCopy={onCopyDecoratedMessage}                                      >
+                                            <RichTextEditor.Content className={`message-decorator-editor-content${isDecorated ? '' : ` normal-text-placeholder`}`} />
                                         </RichTextEditor>
                                     </Box>
                                 )}

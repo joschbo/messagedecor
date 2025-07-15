@@ -1,7 +1,7 @@
 .message-decorator-editor-content {
     font-size: 14px;
-    line-height: 1;
     max-height: 100%;
+    line-height: 1.2;
     overflow-y: auto;
     overflow-wrap: break-word;
     height: 100%;
@@ -14,4 +14,12 @@
 
 .mantine-RichTextEditor-content {
     height: 100%;
+}
+
+.message-decorator-editor-content .tiptap p {
+    margin: 0;
+}
+
+.normal-text-placeholder {
+    color: var(--mantine-color-gray-5);
 }
