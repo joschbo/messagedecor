@@ -22,13 +22,11 @@ const limiter = rateLimit({
 	legacyHeaders: false
 });
 
-app.use(limiter)
-app.use(httpLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.post("/api/decoratemessage", async (req, res) => {
+app.post("/api/decoratemessage", limiter, httpLogger, async (req, res) => {
   console.log(req);
   const inputMessage = req.body.message;
   if (!inputMessage) {
@@ -49,6 +47,18 @@ app.post("/api/decoratemessage", async (req, res) => {
       res.status(500).send(e.message);
   }
 });
+
+if (process.env.NODE_ENV === 'production') {
+  const frontendPath = path.join(__dirname, '../../../../frontend/dist');
+  console.info(`Serving static files from ${frontendPath}`);
+  app.use(express.static(frontendPath));
+
+  // SPA fallback to index.html
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(frontendPath, 'index.html'));
+  });
+}
+
 
 // catch 404 and forward to error handler
 app.use((_req, _res, next) => {

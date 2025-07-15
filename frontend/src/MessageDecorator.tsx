@@ -1,4 +1,4 @@
-import { Box, Button, Card, Center, Container, em, Group, LoadingOverlay, Stack, Text, Title, useMantineTheme } from "@mantine/core";
+import { Box, Button, Card, Center, Container, Group, LoadingOverlay, Stack, Text, Title, useMantineTheme } from "@mantine/core";
 import { RichTextEditor } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";

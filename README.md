@@ -6,8 +6,10 @@ The original text remains unchanged—only the formatting is adjusted to make yo
 ### Technologies used
  ✅Typescript
  ✅React
- ✅AntDesign
+ ✅Mantine
  ✅LangChain
  ✅ChatGPT
  ✅Vite
  ✅ExpressJS
+
+ 

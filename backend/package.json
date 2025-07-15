@@ -4,7 +4,7 @@
   "description": "messagedecor - backend",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/app.js",
+    "start": "node ./dist/backend/src/app.js",
     "dev": "nodemon src/app.ts",
     "build": "tsc -p .",
     "prettier": "prettier --write src/**/*.ts",
