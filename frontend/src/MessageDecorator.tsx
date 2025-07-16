@@ -140,7 +140,6 @@ export default function MessageDecorator() {
                                         { value: MessageStyle.FRIENDLY, label: 'Friendly' },
                                         { value: MessageStyle.PROFESSIONAL, label: 'Professional' },
                                         { value: MessageStyle.EXPRESSIVE, label: 'Expressive' },
-                                        { value: MessageStyle.MINIMALIST, label: 'Minimalist' },
                                         { value: MessageStyle.CUSTOM, label: 'Custom' }
                                     ]}
                                     allowDeselect={false}

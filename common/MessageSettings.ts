@@ -19,7 +19,6 @@ export const MessageStyle = {
     FRIENDLY: "friendly",
     PROFESSIONAL: "professional",
     EXPRESSIVE: "expressive",
-    MINIMALIST: "minimalist",
     CUSTOM: "custom"
 } as const;
 
@@ -38,10 +37,5 @@ export const messageStyleMapping = {
         emojiIntensity: EmojiIntensity.HIGH,
         emphasisLevel: EmphasisLevel.EXPRESSIVE,
         spacingLevel: SpacingLevel.SPACIOUS
-    },
-    [MessageStyle.MINIMALIST]: {
-        emojiIntensity: EmojiIntensity.LOW,
-        emphasisLevel: EmphasisLevel.MINIMAL,
-        spacingLevel: SpacingLevel.COMPACT
-    },
+    }
 };
