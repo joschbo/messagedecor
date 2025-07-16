@@ -143,6 +143,7 @@ export default function MessageDecorator() {
                                         { value: MessageStyle.MINIMALIST, label: 'Minimalist' },
                                         { value: MessageStyle.CUSTOM, label: 'Custom' }
                                     ]}
+                                    allowDeselect={false}
                                     value={messageStyle}
                                     onChange={(value) => {
                                         const typedValue = value as typeof MessageStyle[keyof typeof MessageStyle];
@@ -181,6 +182,7 @@ export default function MessageDecorator() {
                                                     { value: EmojiIntensity.HIGH, label: 'High' }
                                                 ]}
                                                 value={emojiIntensity}
+                                                allowDeselect={false}
                                                 comboboxProps={{ withinPortal: false }}
                                                 onChange={(value) => setEmojiIntensity(value as typeof EmojiIntensity[keyof typeof EmojiIntensity])}
                                             />
@@ -192,6 +194,7 @@ export default function MessageDecorator() {
                                                     { value: EmphasisLevel.EXPRESSIVE, label: 'Expressive' }
                                                 ]}
                                                 value={emphasisLevel}
+                                                allowDeselect={false}
                                                 comboboxProps={{ withinPortal: false }}
                                                 onChange={(value) => setEmphasisLevel(value as typeof EmphasisLevel[keyof typeof EmphasisLevel])}
                                             />
@@ -203,6 +206,7 @@ export default function MessageDecorator() {
                                                     { value: SpacingLevel.SPACIOUS, label: 'Spacious' }
                                                 ]}
                                                 value={spacingLevel}
+                                                allowDeselect={false}
                                                 comboboxProps={{ withinPortal: false }}
                                                 onChange={(value) => setSpacingLevel(value as typeof SpacingLevel[keyof typeof SpacingLevel])}
                                             />
