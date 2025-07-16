@@ -1,4 +1,4 @@
-import { Box, Button, Card, Center, Container, Group, LoadingOverlay, Stack, Text, Title, useMantineTheme } from "@mantine/core";
+import { Box, Button, Card, Center, Container, Group, LoadingOverlay, Popover, PopoverTarget, Select, Stack, Text, Title, useMantineTheme } from "@mantine/core";
 import { RichTextEditor } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -8,12 +8,18 @@ import { useEffect, useState } from "react";
 import { validateMessage } from "../../common/MessageValidator";
 import { notifications } from "@mantine/notifications";
 import { useMediaQuery } from "@mantine/hooks";
+import { EmojiIntensity, EmphasisLevel, MessageStyle, SpacingLevel, messageStyleMapping } from "../../common/MessageSettings";
 
 export default function MessageDecorator() {
     const [userMessage, setUserMessage] = useState("");
     const [decoratedMessage, setDecoratedMessage] = useState("");
     const [isDecorated, setDecorated] = useState(false);
     const [isDecorationRunning, setIsDecorationRunning] = useState(false);
+    const [messageStyle, setMessageStyle] = useState(MessageStyle.FRIENDLY);
+    const [emojiIntensity, setEmojiIntensity] = useState(messageStyleMapping[MessageStyle.FRIENDLY].emojiIntensity);
+    const [emphasisLevel, setEmphasisLevel] = useState(messageStyleMapping[MessageStyle.FRIENDLY].emphasisLevel);
+    const [spacingLevel, setSpacingLevel] = useState(messageStyleMapping[MessageStyle.FRIENDLY].spacingLevel);
+    // Validation errors for the message
     const [validationErrors, setValidationErrors] = useState(validateMessage(""));
     const theme = useMantineTheme();
     const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
@@ -61,7 +67,12 @@ export default function MessageDecorator() {
             const response = await fetch("api/decoratemessage", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: userMessage }),
+                body: JSON.stringify({
+                    message: userMessage,
+                    emojiIntensity,
+                    emphasisLevel,
+                    spacingLevel
+                }),
                 mode: "cors",
             });
             setIsDecorationRunning(false);
@@ -113,7 +124,7 @@ export default function MessageDecorator() {
             <Center h="100%" w="100%">
                 <Container w="100%" maw="1000px">
                     <Card shadow="md" padding="xl" radius="md" withBorder>
-                        <Stack gap="md">
+                        <Stack gap="xs">
                             <Stack ta="center" gap="0">
                                 <Title order={2}>
                                     Message Decorator
@@ -122,18 +133,96 @@ export default function MessageDecorator() {
                                     Make your WhatsApp, Telegram, or Signal messages more readable and polished—instantly.
                                 </Text>
                             </Stack>
+                            <Group gap="xs">
+                                <Select
+                                    label="Message Style"
+                                    data={[
+                                        { value: MessageStyle.FRIENDLY, label: 'Friendly' },
+                                        { value: MessageStyle.PROFESSIONAL, label: 'Professional' },
+                                        { value: MessageStyle.EXPRESSIVE, label: 'Expressive' },
+                                        { value: MessageStyle.MINIMALIST, label: 'Minimalist' },
+                                        { value: MessageStyle.CUSTOM, label: 'Custom' }
+                                    ]}
+                                    value={messageStyle}
+                                    onChange={(value) => {
+                                        setMessageStyle(value as typeof MessageStyle[keyof typeof MessageStyle]);
+                                        const styleSettings = messageStyleMapping[value as typeof MessageStyle[keyof typeof MessageStyle]];
+                                        setEmojiIntensity(styleSettings.emojiIntensity);
+                                        setEmphasisLevel(styleSettings.emphasisLevel);
+                                        setSpacingLevel(styleSettings.spacingLevel);
+                                    }}
+                                    w="200px"
+                                ></Select>
+                                {messageStyle === MessageStyle.CUSTOM && (<Popover
+                                    width={200}
+                                    position="bottom"
+                                    withArrow
+                                    shadow="md"
+                                >
+                                    <Popover.Target>
+                                        <Button
+                                            variant="filled"
+                                            color="gray"
+                                            mt="1.5rem"
+                                        >Settings</Button>
+                                    </Popover.Target>
+                                    <Popover.Dropdown>
+                                        <Stack>
+                                            <Select
+                                                label="Emoji Intensity"
+                                                data={[
+                                                    { value: EmojiIntensity.LOW, label: 'Low' },
+                                                    { value: EmojiIntensity.MEDIUM, label: 'Medium' },
+                                                    { value: EmojiIntensity.HIGH, label: 'High' }
+                                                ]}
+                                                value={emojiIntensity}
+                                                comboboxProps={{ withinPortal: false }}
+                                                onChange={(value) => setEmojiIntensity(value as EmojiIntensity)}
+                                            />
+                                            <Select
+                                                label="Emphasis Level"
+                                                data={[
+                                                    { value: EmphasisLevel.MINIMAL, label: 'Minimal' },
+                                                    { value: EmphasisLevel.STANDARD, label: 'Standard' },
+                                                    { value: EmphasisLevel.EXPRESSIVE, label: 'Expressive' }
+                                                ]}
+                                                value={emphasisLevel}
+                                                comboboxProps={{ withinPortal: false }}
+                                                onChange={(value) => setEmphasisLevel(value as EmphasisLevel)}
+                                            />
+                                            <Select
+                                                label="Spacing Level"
+                                                data={[
+                                                    { value: SpacingLevel.COMPACT, label: 'Compact' },
+                                                    { value: SpacingLevel.STANDARD, label: 'Standard' },
+                                                    { value: SpacingLevel.SPACIOUS, label: 'Spacious' }
+                                                ]}
+                                                value={spacingLevel}
+                                                comboboxProps={{ withinPortal: false }}
+                                                onChange={(value) => setSpacingLevel(value as SpacingLevel)}
+                                            />
+                                        </Stack>
+                                    </Popover.Dropdown>
+                                </Popover>)}
+                            </Group>
+
 
                             <Group grow gap="md" mt="xs">
                                 {/** Display only one RichTextEditor at a time on mobile devices. */}
                                 {(!isMobile || !isDecorated) && (
                                     <Box pos="relative" w="100%">
                                         <LoadingOverlay visible={isDecorationRunning} h="100%" w="100%" hiddenFrom="md" />
+                                        <Stack gap={0}>
+                                            <Text fz="sm">Your Message</Text>
                                         <RichTextEditor editor={userMessageEditor} h="300px" hidden={isMobile && isDecorated}>
                                             <RichTextEditor.Content className="message-decorator-editor-content" />
                                         </RichTextEditor>
+                                        </Stack>
                                     </Box>)}
                                 {/** Display only one RichTextEditor at a time on mobile devices. */}
                                 {(!isMobile || isDecorated) && (
+                                    <Stack gap={0}>
+                                            <Text fz="sm">Decorated Message</Text>
                                     <Box pos="relative" w="100%">
                                         <LoadingOverlay visible={isDecorationRunning} h="100%" w="100%" visibleFrom="md" />
                                         <RichTextEditor
@@ -143,20 +232,23 @@ export default function MessageDecorator() {
                                             <RichTextEditor.Content className={`message-decorator-editor-content${isDecorated ? '' : ` normal-text-placeholder`}`} />
                                         </RichTextEditor>
                                     </Box>
+                                    </Stack>
                                 )}
                             </Group>
                             <Box>
                                 {/** Show Decorate button not on mobile when already decorated and result is shown */}
-                                {(!isMobile || !isDecorated) && (<Button
-                                    onClick={onPressDecorate}
-                                    disabled={validationErrors.length > 0}
-                                    loading={isDecorationRunning}
-                                    variant="filled"
-                                    w="100%"
-                                    autoFocus
-                                >
-                                    Decorate
-                                </Button>
+                                {(!isMobile || !isDecorated) && (
+                                    <Button
+                                        onClick={onPressDecorate}
+                                        disabled={validationErrors.length > 0}
+                                        loading={isDecorationRunning}
+                                        variant="filled"
+                                        w="100%"
+                                        autoFocus
+                                        flex={1}
+                                    >
+                                        Decorate
+                                    </Button>
                                 )}
                                 {/** Show Clear button on mobile when already decorated and result is shown */}
                                 {isMobile && isDecorated && (
@@ -169,8 +261,8 @@ export default function MessageDecorator() {
                     </Card>
                 </Container>
             </Center>
-            
-            <footer style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+
+            <footer style={{ position: 'absolute', bottom: '0', width: '100%' }}>
                 <Text ta="center" c="dimmed" fz="xs" p="md">
                     Made with ❤️ by <a href="https://joschabohn.de" target="_blank" rel="noopener noreferrer">Joscha Bohn</a>
                 </Text>

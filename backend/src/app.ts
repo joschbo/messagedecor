@@ -40,8 +40,14 @@ app.post("/api/decoratemessage", limiter, httpLogger, async (req, res) => {
       return;
   }
 
+  const { emojiIntensity, emphasisLevel, spacingLevel } = req.body;
   try {
-      const decoratedMessage = await MessageDecorService.decorateMessage(inputMessage);
+      const decoratedMessage = await MessageDecorService.decorateMessage({
+        inputMessage,
+        emojiIntensity: emojiIntensity,
+        emphasisLevel: emphasisLevel,
+        spacingLevel: spacingLevel
+      });
       res.json({ message: decoratedMessage });
   } catch (e) {
       res.status(500).send(e.message);
