@@ -1,32 +1,27 @@
-export enum EmojiIntensity {
-    LOW = "low",
-    MEDIUM = "medium",
-    HIGH = "high"
-}
-export enum EmphasisLevel {
-    MINIMAL = "minimal",
-    STANDARD = "standard",
-    EXPRESSIVE = "expressive"
-}
-export enum SpacingLevel {
-    COMPACT = "compact",
-    STANDARD = "standard",
-    SPACIOUS = "spacious"
-}
+export const EmojiIntensity = {
+    LOW: "low",
+    MEDIUM: "medium",
+    HIGH: "high"
+} as const;
 
-export const MessageStyle: {
-    FRIENDLY: string;
-    PROFESSIONAL: string;
-    EXPRESSIVE: string;
-    MINIMALIST: string;
-    CUSTOM: string;
-} = {
+export const EmphasisLevel = {
+    MINIMAL: "minimal",
+    STANDARD: "standard",
+    EXPRESSIVE: "expressive"
+} as const;
+export const SpacingLevel = {
+    COMPACT: "compact",
+    STANDARD: "standard",
+    SPACIOUS: "spacious"
+} as const
+
+export const MessageStyle = {
     FRIENDLY: "friendly",
     PROFESSIONAL: "professional",
     EXPRESSIVE: "expressive",
     MINIMALIST: "minimalist",
     CUSTOM: "custom"
-};
+} as const;
 
 export const messageStyleMapping = {
     [MessageStyle.PROFESSIONAL]: {
@@ -48,5 +43,5 @@ export const messageStyleMapping = {
         emojiIntensity: EmojiIntensity.LOW,
         emphasisLevel: EmphasisLevel.MINIMAL,
         spacingLevel: SpacingLevel.COMPACT
-    }
+    },
 };

@@ -1,4 +1,4 @@
-import { Box, Button, Card, Center, Container, Group, LoadingOverlay, Popover, PopoverTarget, Select, Stack, Text, Title, useMantineTheme } from "@mantine/core";
+import { Box, Button, Card, Center, Container, Group, LoadingOverlay, Popover, Select, Stack, Text, Title, useMantineTheme } from "@mantine/core";
 import { RichTextEditor } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -15,10 +15,10 @@ export default function MessageDecorator() {
     const [decoratedMessage, setDecoratedMessage] = useState("");
     const [isDecorated, setDecorated] = useState(false);
     const [isDecorationRunning, setIsDecorationRunning] = useState(false);
-    const [messageStyle, setMessageStyle] = useState(MessageStyle.FRIENDLY);
-    const [emojiIntensity, setEmojiIntensity] = useState(messageStyleMapping[MessageStyle.FRIENDLY].emojiIntensity);
-    const [emphasisLevel, setEmphasisLevel] = useState(messageStyleMapping[MessageStyle.FRIENDLY].emphasisLevel);
-    const [spacingLevel, setSpacingLevel] = useState(messageStyleMapping[MessageStyle.FRIENDLY].spacingLevel);
+    const [messageStyle, setMessageStyle] = useState<typeof MessageStyle[keyof typeof MessageStyle]>(MessageStyle.FRIENDLY);
+    const [emojiIntensity, setEmojiIntensity] = useState<typeof EmojiIntensity[keyof typeof EmojiIntensity]>(messageStyleMapping[MessageStyle.FRIENDLY].emojiIntensity);
+    const [emphasisLevel, setEmphasisLevel] = useState<typeof EmphasisLevel[keyof typeof EmphasisLevel]>(messageStyleMapping[MessageStyle.FRIENDLY].emphasisLevel);
+    const [spacingLevel, setSpacingLevel] = useState<typeof SpacingLevel[keyof typeof SpacingLevel]>(messageStyleMapping[MessageStyle.FRIENDLY].spacingLevel);
     // Validation errors for the message
     const [validationErrors, setValidationErrors] = useState(validateMessage(""));
     const theme = useMantineTheme();
@@ -145,8 +145,13 @@ export default function MessageDecorator() {
                                     ]}
                                     value={messageStyle}
                                     onChange={(value) => {
-                                        setMessageStyle(value as typeof MessageStyle[keyof typeof MessageStyle]);
-                                        const styleSettings = messageStyleMapping[value as typeof MessageStyle[keyof typeof MessageStyle]];
+                                        const typedValue = value as typeof MessageStyle[keyof typeof MessageStyle];
+                                        setMessageStyle(typedValue);
+                                        if(!typedValue || typedValue === MessageStyle.CUSTOM) {
+                                            return;
+                                        }
+                                        // If a predefined style is selected, apply its settings
+                                        const styleSettings = messageStyleMapping[typedValue];
                                         setEmojiIntensity(styleSettings.emojiIntensity);
                                         setEmphasisLevel(styleSettings.emphasisLevel);
                                         setSpacingLevel(styleSettings.spacingLevel);
@@ -177,7 +182,7 @@ export default function MessageDecorator() {
                                                 ]}
                                                 value={emojiIntensity}
                                                 comboboxProps={{ withinPortal: false }}
-                                                onChange={(value) => setEmojiIntensity(value as EmojiIntensity)}
+                                                onChange={(value) => setEmojiIntensity(value as typeof EmojiIntensity[keyof typeof EmojiIntensity])}
                                             />
                                             <Select
                                                 label="Emphasis Level"
@@ -188,7 +193,7 @@ export default function MessageDecorator() {
                                                 ]}
                                                 value={emphasisLevel}
                                                 comboboxProps={{ withinPortal: false }}
-                                                onChange={(value) => setEmphasisLevel(value as EmphasisLevel)}
+                                                onChange={(value) => setEmphasisLevel(value as typeof EmphasisLevel[keyof typeof EmphasisLevel])}
                                             />
                                             <Select
                                                 label="Spacing Level"
@@ -199,7 +204,7 @@ export default function MessageDecorator() {
                                                 ]}
                                                 value={spacingLevel}
                                                 comboboxProps={{ withinPortal: false }}
-                                                onChange={(value) => setSpacingLevel(value as SpacingLevel)}
+                                                onChange={(value) => setSpacingLevel(value as typeof SpacingLevel[keyof typeof SpacingLevel])}
                                             />
                                         </Stack>
                                     </Popover.Dropdown>
