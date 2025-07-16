@@ -120,7 +120,7 @@ export default function MessageDecorator() {
 
 
     return (
-        <Stack mih="100vh" bg="gray.1" w="100vw" gap={0}>
+        <Stack mih="100dvh" bg="gray.1" w="100vw" gap={0}>
             <Center h="100%" w="100%" flex={1} p={isMobile ? "0" : "md"} pb="0">
                 <Container w="100%" maw="1000px" p="xs">
                     <Card shadow="md" pl="xl" pr="xl" pt="md" pb="md" radius="md" withBorder>
@@ -156,7 +156,7 @@ export default function MessageDecorator() {
                                         setEmphasisLevel(styleSettings.emphasisLevel);
                                         setSpacingLevel(styleSettings.spacingLevel);
                                     }}
-                                    w="200px"
+                                    w="160px"
                                 ></Select>
                                 {messageStyle === MessageStyle.CUSTOM && (<Popover
                                     width={200}
