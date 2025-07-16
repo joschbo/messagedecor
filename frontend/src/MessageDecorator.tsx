@@ -120,11 +120,11 @@ export default function MessageDecorator() {
 
 
     return (
-        <Box h="100vh" bg="gray.1" w="100vw">
-            <Center h="100%" w="100%">
-                <Container w="100%" maw="1000px">
-                    <Card shadow="md" padding="xl" radius="md" withBorder>
-                        <Stack gap="xs">
+        <Stack mih="100vh" bg="gray.1" w="100vw" gap={0}>
+            <Center h="100%" w="100%" flex={1} p={isMobile ? "0" : "md"} pb="0">
+                <Container w="100%" maw="1000px" p="xs">
+                    <Card shadow="md" pl="xl" pr="xl" pt="md" pb="md" radius="md" withBorder>
+                        <Stack gap="0">
                             <Stack ta="center" gap="0">
                                 <Title order={2}>
                                     Message Decorator
@@ -235,7 +235,7 @@ export default function MessageDecorator() {
                                     </Stack>
                                 )}
                             </Group>
-                            <Box>
+                            <Box mt="md">
                                 {/** Show Decorate button not on mobile when already decorated and result is shown */}
                                 {(!isMobile || !isDecorated) && (
                                     <Button
@@ -262,11 +262,11 @@ export default function MessageDecorator() {
                 </Container>
             </Center>
 
-            <footer style={{ position: 'absolute', bottom: '0', width: '100%' }}>
-                <Text ta="center" c="dimmed" fz="xs" p="md">
+             <Container size="xs" mt="xs" mb="xs">
+                <Text ta="center" c="dimmed" fz="xs" >
                     Made with ❤️ by <a href="https://joschabohn.de" target="_blank" rel="noopener noreferrer">Joscha Bohn</a>
                 </Text>
-            </footer>
-        </Box>
+            </Container>
+        </Stack>
     );
 }
