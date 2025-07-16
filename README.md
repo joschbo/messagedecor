@@ -1,3 +1,4 @@
+![Application Screenshot](image.png)
 # 🎨 MessageDecor
 
 **MessageDecor** is a lightweight LLM-powered web application that enhances the clarity, structure, and engagement of your broadcast messages—perfect for **WhatsApp**, **Telegram**, **Signal**, and other messengers.
@@ -24,6 +25,11 @@ MessageDecor transforms it into:
 > 🔥 **LIMITED TIME SALE!**  
 > ⏰ Ends Soon — Get Your **Discount Now** ✅  
 > ```
+
+## 🚀 Live Demo
+
+Try it out here:  
+👉 [messagedecor.joschabohn.de](https://messagedecor.joschabohn.de)
 
 ## 🛠️ Technologies Used
 
